@@ -29,7 +29,7 @@ class Worker {
 
 		$this->status = proc_get_status( $this->process );
 		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
-		printf( '[%d] Worker status: %s' . PHP_EOL, $this->job->id, print_r( $this->status, true ) );
+		// printf( '[%d] Worker status: %s' . PHP_EOL, $this->job->id, print_r( $this->status, true ) );
 		return ! ( $this->status['running'] );
 	}
 
@@ -54,16 +54,18 @@ class Worker {
 	 * @return bool Did the process run successfully?
 	 */
 	public function shutdown() {
-		printf( '[%d] Worker shutting down...' . PHP_EOL, $this->job->id );
 
 		// Exhaust the streams
 		$this->drain_pipes();
 		fclose( $this->pipes[1] ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 		fclose( $this->pipes[2] ); // phpcs:ignore WordPress.WP.AlternativeFunctions
-
-		printf( '[%d] Worker out: %s' . PHP_EOL, $this->job->id, $this->output );
-		printf( '[%d] Worker err: %s' . PHP_EOL, $this->job->id, $this->error_output );
-		printf( '[%d] Worker ret: %d' . PHP_EOL, $this->job->id, $this->status['exitcode'] );
+		
+		$job_return = array(
+			"out" => $this->output, 
+			"error_out" => $this->error_output, 
+			"exitcode" => $this->status['exitcode']	
+		);
+		printf( '[%s][%d] Job Done %s' . PHP_EOL, $this->job->get_site_url(), $this->job->id, json_encode( $job_return) );
 
 		// Close the process down too
 		proc_close( $this->process );
