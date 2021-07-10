@@ -268,7 +268,7 @@ class Runner {
 		$command = $this->get_job_command( $job );
 
 		$cwd = $this->wp_path;
-		printf( '[%d] Running %s (%s %s)' . PHP_EOL, $job->id, $command, $job->hook, $job->args );
+		printf( '[%s][%d] Running %s (%s %s)' . PHP_EOL, $job->get_site_url(), $job->id, $command, $job->hook, $job->args );
 
 		$spec = [
 			// We're intentionally avoiding adding a stdin pipe
