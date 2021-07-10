@@ -118,7 +118,7 @@ class Runner {
 			// Do we have workers to spare?
 			if ( count( $this->workers ) === $this->options['max_workers'] ) {
 				// At maximum workers, wait a cycle
-				printf( '[  ] Out of workers' . PHP_EOL );
+				// printf( '[  ] Out of workers' . PHP_EOL );
 				sleep( LOOP_INTERVAL );
 				continue;
 			}
@@ -294,7 +294,7 @@ class Runner {
 		$worker = new Worker( $process, $pipes, $job );
 		$this->workers[] = $worker;
 
-		printf( '[%d] Started worker' . PHP_EOL, $job->id );
+		// printf( '[%d] Started worker' . PHP_EOL, $job->id );
 
 		/**
 		 * Action after starting a new worker.
