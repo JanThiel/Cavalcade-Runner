@@ -63,7 +63,8 @@ class Worker {
 		$job_return = array(
 			"out" => $this->output, 
 			"error_out" => $this->error_output, 
-			"exitcode" => $this->status['exitcode']	
+			"exitcode" => $this->status['exitcode'],
+			"level" => empty( $this->error_output ) ? "INFO" : "WARN"
 		);
 		printf( '[%s][%d] Job Done %s' . PHP_EOL, $this->job->get_site_url(), $this->job->id, json_encode( $job_return) );
 
