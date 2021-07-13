@@ -66,7 +66,7 @@ class Worker {
 			"exitcode" => $this->status['exitcode'],
 			"level" => empty( $this->error_output ) ? "INFO" : "WARN"
 		);
-		printf( '[%s][%d] Job Done %s' . PHP_EOL, $this->job->get_site_url(), $this->job->id, json_encode( $job_return) );
+		printf( '[%s][%s][%d] Job Done %s' . PHP_EOL, $this->job->get_site_url(), $this->job->hook, $this->job->id, json_encode( $job_return) );
 
 		// Close the process down too
 		proc_close( $this->process );
