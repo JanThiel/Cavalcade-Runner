@@ -42,6 +42,10 @@ class Job {
 		$statement = $this->db->prepare( $query );
 		$statement->bindValue( ':site', $this->site );
 		$statement->execute();
+		
+		if ( 0 === $statement->rowCount() ) {
+			return false;
+		}		
 
 		$data = $statement->fetch( PDO::FETCH_ASSOC );
 		$url = $data['domain'] . $data['path'];
