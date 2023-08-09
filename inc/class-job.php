@@ -73,7 +73,6 @@ class Job {
 	}
 
 	public function mark_completed() {
-		$data = [];
 		if ( $this->interval ) {
 			$this->reschedule();
 		} else {
@@ -111,6 +110,10 @@ class Job {
 	 * @param  string $message failure detail message
 	 */
 	public function mark_failed( $message = '' ) {
+        // Reschedule the job if it has an interval
+        if ( $this->interval ) {
+            $this->reschedule();
+        }
 		$query = "UPDATE {$this->table_prefix}cavalcade_jobs";
 		$query .= ' SET status = "failed"';
 		$query .= ' WHERE id = :id';

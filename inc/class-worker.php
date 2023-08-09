@@ -61,12 +61,15 @@ class Worker {
 		fclose( $this->pipes[2] ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 		
 		$job_return = array(
-			"out" => $this->output, 
-			"error_out" => $this->error_output, 
+			"error_out" => $this->error_output,
 			"exitcode" => $this->status['exitcode'],
 			"level" => empty( $this->error_output ) ? "INFO" : "WARN"
 		);
-		printf( '[%s][%s][%d] Job Done %s' . PHP_EOL, $this->job->get_site_url(), $this->job->hook, $this->job->id, json_encode( $job_return) );
+        if ( $this->status['exitcode'] === 0 ) {
+            printf( '[%s][%s][%d] Job Done' . PHP_EOL, $this->job->get_site_url(), $this->job->hook, $this->job->id);
+        } else {
+            printf( '[%s][%s][%d] Job Failed %s' . PHP_EOL, $this->job->get_site_url(), $this->job->hook, $this->job->id, json_encode($job_return) );
+        }
 
 		// Close the process down too
 		proc_close( $this->process );
