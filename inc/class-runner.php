@@ -37,7 +37,7 @@ class Runner {
 
 	public function __construct( $options = [] ) {
 		$defaults = [
-			'max_workers' => 20,
+			'max_workers' => 35,
 		];
 		$this->options = array_merge( $defaults, $options );
 		$this->hooks = new Hooks();
