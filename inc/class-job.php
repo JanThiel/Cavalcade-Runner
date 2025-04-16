@@ -18,9 +18,15 @@ class Job {
 	public $nextrun;
 	public $interval;
 	public $status;
+	public $schedule;
 
 	protected $db;
 	protected $table_prefix;
+
+	/**
+	 * @var null|bool
+	 */
+	protected static $blogs_table_exists;
 
 	public function __construct( $db, $table_prefix ) {
 		$this->db = $db;
@@ -28,11 +34,8 @@ class Job {
 	}
 
 	public function get_site_url() {
-		$query = "SHOW TABLES LIKE '{$this->table_prefix}blogs'";
-		$statement = $this->db->prepare( $query );
-		$statement->execute();
 
-		if ( 0 === $statement->rowCount() ) {
+		if ( ! $this->blogs_table_exists() ) {
 			return false;
 		}
 
@@ -50,6 +53,20 @@ class Job {
 		$data = $statement->fetch( PDO::FETCH_ASSOC );
 		$url = $data['domain'] . $data['path'];
 		return $url;
+	}
+
+	protected function blogs_table_exists() {
+		if ( static::$blogs_table_exists !== null ) {
+			return static::$blogs_table_exists;
+		}
+
+		$query = "SHOW TABLES LIKE '{$this->table_prefix}blogs'";
+		$statement = $this->db->prepare( $query );
+		$statement->execute();
+
+		static::$blogs_table_exists = $statement->rowCount() > 0;
+
+		return static::$blogs_table_exists;
 	}
 
 	/**
